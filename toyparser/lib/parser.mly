@@ -8,6 +8,7 @@ open Ast
 %token RPAREN
 %token EOF
 
+%left MINUS
 %left PLUS
 
 %start <ast> prog
