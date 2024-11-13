@@ -17,10 +17,13 @@ exception NoRuleApplies
 let rec trace1 = function
     If(True,e1,_) -> e1
   | If(False,_,e2) -> e2
-  | If(_,_,_) -> failwith "TODO"
-  | _ -> raise NoRuleApplies
-
-let rec trace e = try
+  | If(condizione, e1, _) when condizione=True-> trace1 e1 
+  | If(condizione, _, e2) when condizione=False-> trace1 e2
+  | _ -> failwith "Errore"
+  
+  
+  
+  let rec trace e = try
     let e' = trace1 e
     in e::(trace e')
   with NoRuleApplies -> [e]
@@ -29,4 +32,6 @@ let rec trace e = try
 let rec eval = function
     True -> true
   | False -> false
-  | If(_,_,_) -> failwith "TODO"
+  | If(condizione, e1, e2) ->  (match eval(condizione) with
+                                                                true -> eval(e1)
+                                                              | false -> eval(e2))
